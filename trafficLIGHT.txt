@@ -1,0 +1,98 @@
+// PIC16F877A Configuration Bit Settings
+
+// 'C' source line config statements
+
+// CONFIG
+#pragma config FOSC = EXTRC     // Oscillator Selection bits (RC oscillator)
+#pragma config WDTE = OFF       // Watchdog Timer Enable bit (WDT disabled)
+#pragma config PWRTE = OFF      // Power-up Timer Enable bit (PWRT disabled)
+#pragma config BOREN = OFF      // Brown-out Reset Enable bit (BOR disabled)
+#pragma config LVP = OFF        // Low-Voltage (Single-Supply) In-Circuit Serial Programming Enable bit (RB3 is digital I/O, HV on MCLR must be used for programming)
+#pragma config CPD = OFF        // Data EEPROM Memory Code Protection bit (Data EEPROM code protection off)
+#pragma config WRT = OFF        // Flash Program Memory Write Enable bits (Write protection off; all program memory may be written to by EECON control)
+#pragma config CP = OFF         // Flash Program Memory Code Protection bit (Code protection off)
+
+// #pragma config statements should precede project file includes.
+// Use project enums instead of #define for ON and OFF.
+
+#include <xc.h>
+#define _XTAL_FREQ 6000000
+
+// NORTH
+#define N_GREEN   RD3
+#define N_YELLOW  RD4
+#define N_RED     RD5
+
+// EAST
+#define E_GREEN   RD0
+#define E_YELLOW  RD1
+#define E_RED     RD2
+
+// SOUTH
+#define S_GREEN   RC0
+#define S_YELLOW  RC1
+#define S_RED     RC2
+
+// WEST
+#define W_GREEN   RC3
+#define W_YELLOW  RC4
+#define W_RED     RC5
+
+void clear_all_lights() {
+    PORTC = 0x00;
+    PORTD = 0x00;
+}
+
+void normal_north() {
+    clear_all_lights();
+    N_GREEN = 1;
+    E_YELLOW = 1;
+    S_RED = 1;
+    W_RED = 1;
+}
+
+void normal_east() {
+    clear_all_lights();
+    N_RED= 1;
+    E_GREEN = 1;
+    S_YELLOW = 1;
+    W_RED = 1;
+}
+
+void normal_south() {
+    clear_all_lights();
+    N_RED = 1;
+    E_RED= 1;
+    S_GREEN = 1;
+    W_YELLOW= 1;
+}
+
+void normal_west() {
+    clear_all_lights();
+    N_YELLOW= 1;
+    E_RED= 1;
+    S_RED = 1;
+    W_GREEN = 1;
+}
+
+
+void main(void) {
+    TRISC = 0x00; 
+    PORTC = 0x00;
+    TRISD = 0x00;
+    PORTD = 0x00;
+    
+    while(1){
+     
+        while (1) {
+        normal_north();
+        __delay_ms(1000);
+        normal_east();
+        __delay_ms(1000);
+        normal_south();
+        __delay_ms(1000);
+        normal_west();
+        __delay_ms(1000);
+    }
+    }
+}
